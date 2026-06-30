@@ -1,0 +1,14 @@
+name: deploy
+on:
+  release:
+    types: [published]
+jobs:
+  deploy:
+    if: ${{ !github.event.release.prerelease }}   # RCs are pre-releases → skipped
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - name: Deploy (DreamHost)
+        run: echo "TODO: deploy to DreamHost. Wired up when the deploy target is provisioned."

@@ -1,0 +1,13 @@
+{
+    "name": "introibo/api",
+    "description": "The Introibo API: a versioned, cache-first HTTP service over the liturgical engine.",
+    "type": "project",
+    "license": "AGPL-3.0-or-later",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.10",
+        "phpstan/phpstan": "^1.12"
+    }
+}
