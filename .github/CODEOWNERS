@@ -1,0 +1,10 @@
+# Code owners for Introibo Api.
+# The last matching pattern wins; owners are auto-requested for review.
+
+# Default owner for everything.
+*                       @manlycucumber
+
+# The public API contract is owner-reviewed: changes to the OpenAPI spec or the
+# /v1 surface affect every downstream consumer. (Paths reserve the convention.)
+/openapi/               @manlycucumber
+/docs/                  @manlycucumber
