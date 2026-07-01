@@ -3,7 +3,7 @@
 _A plain-language overview of where the Introibo API is headed. Each version links to its tracking
 milestone and the issues that make it up (issue links are added once the backlog is imported)._
 
-_Last updated: 2026-06-30_
+_Last updated: 2026-07-01_
 
 ## 🚧 In progress — [v0.1.0](https://github.com/Introibo-App/Api/milestone/1)
 **The platform comes online.** A versioned `/v1` service: cache-first with static generation, ETags
@@ -16,8 +16,13 @@ an acceptable-use policy.
 ## 🔭 Future
 - **[v0.4.0](https://github.com/Introibo-App/Api/milestone/3) — Particular-calendar presets.** SSPX, FSSP, ICKSP, Generic, Cum sanctissima.
 - **[v0.6.0](https://github.com/Introibo-App/Api/milestone/4) — Outputs & integrations.** iCal feed + printable monthly Ordo (PDF).
-- **[v1.0.0](https://github.com/Introibo-App/Api/milestone/5) — Platform launch.** Cut together with Core, Site, and Ordo.
-- **[v1.1.0](https://github.com/Introibo-App/Api/milestone/6)+ — Text & office endpoints**, mirroring Core's Mass/Office work.
+- **[v1.0.0](https://github.com/Introibo-App/Api/milestone/5) — Platform launch.** Cut together with Core, Site, and Ordo — plus generated
+  **JS/PHP/Python SDKs**, a **docs portal**, and a **/v1 deprecation policy**.
+- **[v1.1.0](https://github.com/Introibo-App/Api/milestone/6)+ — Text & office endpoints**, mirroring Core's Mass/Office work; plus
+  **provenance & explainability** (citations on responses, `/v1/sources`, `?explain` resolution trace),
+  and **CalDAV, webhooks & shareable presets**.
+- **[v2.0.0](https://github.com/Introibo-App/Api/milestone/9) — Comparison endpoints.** `/v1/compare/calendar`, `/compare/rite`, `/compare/office`
+  over the shared diff engine, plus `/v1/rites` discovery.
 
 ## ✅ Released
 _None yet._
