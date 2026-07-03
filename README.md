@@ -45,7 +45,10 @@ php bin/generate-static.php 2024 2030 ./build/static
 Access control (API keys, quotas, rate limits) is **off until a key store is
 configured** — set `INTROIBO_DB_DSN` (schema in [`sql/schema.sql`](sql/schema.sql))
 and manage tenants/keys with `php bin/api-key.php` (`tenant` / `issue` / `rotate` /
-`revoke`). Health and discovery stay public.
+`revoke`). Health, discovery, and the policies (`/v1/aup`, `/v1/terms`) stay public.
+Admin actions (`POST /v1/admin/purge`, `/rebuild`) exist only when
+`INTROIBO_ADMIN_TOKEN` is set; edge purge targets Cloudflare (`INTROIBO_CF_ZONE` /
+`INTROIBO_CF_TOKEN`), a no-op otherwise.
 
 ## Licence
 

@@ -4,22 +4,30 @@ declare(strict_types=1);
 
 namespace Introibo\Api;
 
+use Introibo\Api\Admin\AdminGate;
 use Introibo\Api\Auth\AccessControl;
 use Introibo\Api\Auth\GuardedHandler;
 use Introibo\Api\Cache\ResponseCache;
 use Introibo\Api\Cache\StaticStore;
 use Introibo\Api\Contract\ApiError;
 use Introibo\Api\Contract\ApiException;
+use Introibo\Api\Edge\CloudflareEdge;
+use Introibo\Api\Edge\EdgeCache;
+use Introibo\Api\Edge\NullEdge;
 use Introibo\Api\Engine\CoreGateway;
 use Introibo\Api\Handler\DayHandler;
 use Introibo\Api\Handler\HealthHandler;
 use Introibo\Api\Handler\MetaHandler;
 use Introibo\Api\Handler\MonthHandler;
+use Introibo\Api\Handler\PolicyHandler;
+use Introibo\Api\Handler\PurgeHandler;
+use Introibo\Api\Handler\RebuildHandler;
 use Introibo\Api\Handler\YearHandler;
 use Introibo\Api\Http\Handler;
 use Introibo\Api\Http\Request;
 use Introibo\Api\Http\Response;
 use Introibo\Api\Http\Router;
+use Introibo\Api\Legal\Policies;
 use Introibo\Api\Query\QueryParser;
 use Throwable;
 
@@ -40,24 +48,37 @@ final class Kernel
         ?CoreGateway $core = null,
         ?StaticStore $store = null,
         ?AccessControl $access = null,
+        ?AdminGate $admin = null,
+        ?EdgeCache $edge = null,
     ) {
         $core ??= new CoreGateway();
         $this->dataVersion = $core->dataVersion();
         $store ??= StaticStore::fromEnvironment($this->dataVersion);
         $access ??= AccessControl::fromEnvironment();
+        $admin ??= AdminGate::fromEnvironment();
+        $edge ??= CloudflareEdge::fromEnvironment() ?? new NullEdge();
         $parser = new QueryParser($core);
         $cache = new ResponseCache($store);
 
-        // Health and discovery are public; the metered calendar reads sit behind the
-        // access gate (a no-op when access control is disabled).
+        // Health, discovery, and the policies are public; the metered calendar reads
+        // sit behind the access gate (a no-op when access control is disabled).
         $guard = static fn (Handler $handler): Handler => new GuardedHandler($handler, $access);
 
         $this->router = new Router();
         $this->router->add('GET', '/v1/health', new HealthHandler($core));
         $this->router->add('GET', '/v1/meta', new MetaHandler($core));
+        $this->router->add('GET', '/v1/aup', new PolicyHandler(Policies::aup()));
+        $this->router->add('GET', '/v1/terms', new PolicyHandler(Policies::terms()));
         $this->router->add('GET', '/v1/day/{date}', $guard(new DayHandler($core, $parser, $cache)));
         $this->router->add('GET', '/v1/month/{month}', $guard(new MonthHandler($core, $parser, $cache)));
         $this->router->add('GET', '/v1/year/{year}', $guard(new YearHandler($core, $parser, $cache)));
+
+        // Admin actions exist only when an admin token is configured — an unconfigured
+        // service exposes no admin surface at all.
+        if ($admin->enabled()) {
+            $this->router->add('POST', '/v1/admin/purge', new PurgeHandler($admin, $edge, $core));
+            $this->router->add('POST', '/v1/admin/rebuild', new RebuildHandler($admin, $edge, $core));
+        }
     }
 
     public function handle(Request $request): Response

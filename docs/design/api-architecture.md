@@ -32,11 +32,13 @@ The **temporal resource** lives in the path (it maps 1:1 to a static file); the
 **resolution parameters** live in the query with sensible defaults:
 
 ```
-GET /v1/day/{date}      ?system=1962 &calendar=universal &lang=la
-GET /v1/month/{year-month}
-GET /v1/year/{year}
-GET /v1/meta            (discovery: supported systems, calendars, languages)
-GET /v1/health          (liveness)
+GET  /v1/day/{date}      ?system=1962 &calendar=universal &lang=la
+GET  /v1/month/{year-month}
+GET  /v1/year/{year}
+GET  /v1/meta            (discovery: supported systems, calendars, languages)
+GET  /v1/aup             (acceptable-use policy)   GET /v1/terms
+GET  /v1/health          (liveness)
+POST /v1/admin/purge     POST /v1/admin/rebuild     (admin-token only)
 ```
 
 - `date` is an ISO `YYYY-MM-DD`; `year-month` is `YYYY-MM`; `year` is `YYYY`.
@@ -162,6 +164,19 @@ enabling metering is a deploy-time switch, not a code change.
 The MySQL database is the maintainer-provisioned half; the logic is proven against
 the in-memory store, and `AccessControl::fromEnvironment()` wires MySQL when
 `INTROIBO_DB_DSN` is set.
+
+## Admin actions & policies
+
+- **`GET /v1/aup`, `GET /v1/terms`** (#30) — the acceptable-use policy and terms of
+  use, served as versioned data (`Legal\Policies`). Public and cacheable.
+- **`POST /v1/admin/purge`** (#29) and **`POST /v1/admin/rebuild`** (#28) — admin
+  actions behind `Admin\AdminGate` (a shared token via `X-Admin-Token` or bearer).
+  Purge invalidates the edge (`Edge\EdgeCache` → `CloudflareEdge`); rebuild reports
+  the current data version and purges, so a new build is served at once (the static
+  tier is regenerated out of band with `bin/generate-static.php`). **The admin routes
+  are only registered when `INTROIBO_ADMIN_TOKEN` is set** — an unconfigured service
+  exposes no admin surface. When no CDN is configured the edge is `NullEdge` and a
+  purge is a no-op.
 
 ## Framework posture
 
