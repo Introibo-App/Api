@@ -37,14 +37,19 @@ abstract class RangeHandler implements Handler
     {
         $query = $this->parse($params, $request);
 
-        return $this->cache->respond($query->cacheKey(), function () use ($query): array {
-            $days = $this->core->days($query);
-            $meta = array_merge(
-                Envelope::meta($this->core->dataVersion(), $query->parameters()),
-                ['count' => count($days)],
-            );
+        return $this->cache->respond(
+            $request,
+            $query->cacheKey(),
+            $this->core->dataVersion(),
+            function () use ($query): array {
+                $days = $this->core->days($query);
+                $meta = array_merge(
+                    Envelope::meta($this->core->dataVersion(), $query->parameters()),
+                    ['count' => count($days)],
+                );
 
-            return Envelope::of($days, $meta);
-        });
+                return Envelope::of($days, $meta);
+            },
+        );
     }
 }

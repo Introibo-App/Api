@@ -33,7 +33,9 @@ final class DayHandler implements Handler
         $query = $this->parser->parseDay($params['date'] ?? '', $request);
 
         return $this->cache->respond(
+            $request,
             $query->cacheKey(),
+            $this->core->dataVersion(),
             fn (): array => Envelope::of(
                 $this->core->day($query),
                 Envelope::meta($this->core->dataVersion(), $query->parameters()),

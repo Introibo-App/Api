@@ -31,10 +31,13 @@ final class Kernel
 {
     private readonly Router $router;
 
+    private readonly string $dataVersion;
+
     public function __construct(?CoreGateway $core = null, ?StaticStore $store = null)
     {
         $core ??= new CoreGateway();
-        $store ??= StaticStore::fromEnvironment($core->dataVersion());
+        $this->dataVersion = $core->dataVersion();
+        $store ??= StaticStore::fromEnvironment($this->dataVersion);
         $parser = new QueryParser($core);
         $cache = new ResponseCache($store);
 
@@ -49,11 +52,15 @@ final class Kernel
     public function handle(Request $request): Response
     {
         try {
-            return $this->router->dispatch($request);
+            $response = $this->router->dispatch($request);
         } catch (ApiException $e) {
-            return Response::error($e->error());
+            $response = Response::error($e->error());
         } catch (Throwable) {
-            return Response::error(ApiError::internal());
+            $response = Response::error(ApiError::internal());
         }
+
+        // The service-wide data-version stamp on every response (#19), so any client
+        // or proxy can read which build produced it without parsing the body.
+        return $response->withHeader('x-data-version', $this->dataVersion);
     }
 }
