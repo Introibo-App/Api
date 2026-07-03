@@ -6,6 +6,7 @@ namespace Introibo\Api\Tests;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use Introibo\Api\Admin\AdminGate;
 use Introibo\Api\Auth\AccessControl;
 use Introibo\Api\Auth\InMemoryKeyStore;
 use Introibo\Api\Auth\KeyIssuer;
@@ -16,6 +17,7 @@ use Introibo\Api\Http\Request;
 use Introibo\Api\Http\Response;
 use Introibo\Api\Kernel;
 use Introibo\Api\Tests\Support\FixedClock;
+use Introibo\Api\Tests\Support\RecordingEdge;
 use Introibo\Api\Tests\Support\TempDir;
 use PHPUnit\Framework\TestCase;
 
@@ -244,11 +246,62 @@ final class KernelTest extends TestCase
         self::assertArrayHasKey('x-data-version', $second->headers);
     }
 
+    public function testPolicyEndpointsArePublic(): void
+    {
+        $aup = $this->get('/v1/aup');
+        self::assertSame(200, $aup->status);
+        self::assertSame('aup', $this->decode($aup)['data']['slug']);
+        self::assertNotSame('', $this->decode($aup)['data']['body']);
+
+        self::assertSame('terms', $this->decode($this->get('/v1/terms'))['data']['slug']);
+    }
+
+    public function testAdminRoutesAreAbsentWithoutAToken(): void
+    {
+        $response = (new Kernel())->handle(new Request('POST', '/v1/admin/purge'));
+
+        self::assertSame(404, $response->status);
+    }
+
+    public function testAdminPurgeRequiresTheTokenAndHitsTheEdge(): void
+    {
+        $edge = new RecordingEdge();
+        $kernel = $this->adminKernel($edge);
+
+        self::assertSame(401, $kernel->handle(new Request('POST', '/v1/admin/purge'))->status);
+        self::assertSame(0, $edge->purges);
+
+        $ok = $kernel->handle(new Request('POST', '/v1/admin/purge', [], ['x-admin-token' => 'admin-secret']));
+        self::assertSame(200, $ok->status);
+        self::assertTrue($this->decode($ok)['data']['purged']);
+        self::assertSame(1, $edge->purges);
+    }
+
+    public function testAdminRebuildReportsTheVersionAndPurges(): void
+    {
+        $edge = new RecordingEdge();
+
+        $response = $this->adminKernel($edge)->handle(
+            new Request('POST', '/v1/admin/rebuild', [], ['x-admin-token' => 'admin-secret']),
+        );
+
+        self::assertSame(200, $response->status);
+        $data = $this->decode($response)['data'];
+        self::assertArrayHasKey('dataVersion', $data);
+        self::assertTrue($data['purged']);
+        self::assertSame(1, $edge->purges);
+    }
+
     private function guardedKernel(InMemoryKeyStore $store): Kernel
     {
         $clock = new FixedClock(new DateTimeImmutable('2026-07-03 01:27:30', new DateTimeZone('UTC')));
 
         return new Kernel(null, null, new AccessControl($store, $clock));
+    }
+
+    private function adminKernel(RecordingEdge $edge): Kernel
+    {
+        return new Kernel(null, null, null, new AdminGate('admin-secret'), $edge);
     }
 
     /**
