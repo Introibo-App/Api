@@ -9,6 +9,9 @@ use Introibo\Api\Contract\ApiException;
 use Introibo\Api\Engine\CoreGateway;
 use Introibo\Api\Handler\DayHandler;
 use Introibo\Api\Handler\HealthHandler;
+use Introibo\Api\Handler\MetaHandler;
+use Introibo\Api\Handler\MonthHandler;
+use Introibo\Api\Handler\YearHandler;
 use Introibo\Api\Http\Request;
 use Introibo\Api\Http\Response;
 use Introibo\Api\Http\Router;
@@ -32,7 +35,10 @@ final class Kernel
 
         $this->router = new Router();
         $this->router->add('GET', '/v1/health', new HealthHandler($core));
+        $this->router->add('GET', '/v1/meta', new MetaHandler($core));
         $this->router->add('GET', '/v1/day/{date}', new DayHandler($core, $parser));
+        $this->router->add('GET', '/v1/month/{month}', new MonthHandler($core, $parser));
+        $this->router->add('GET', '/v1/year/{year}', new YearHandler($core, $parser));
     }
 
     public function handle(Request $request): Response

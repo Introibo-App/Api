@@ -38,9 +38,50 @@ final class KernelTest extends TestCase
         self::assertSame('sspx', $body['meta']['request']['calendar']);
     }
 
+    public function testMonthEndpointReturnsAnOrderedList(): void
+    {
+        $response = $this->get('/v1/month/2026-09');
+
+        self::assertSame(200, $response->status);
+        $body = $this->decode($response);
+        self::assertCount(30, $body['data']);
+        self::assertSame('2026-09-01', $body['data'][0]['date']);
+        self::assertSame(30, $body['meta']['count']);
+        self::assertSame('2026-09', $body['meta']['request']['month']);
+    }
+
+    public function testYearEndpointResolvesEveryDay(): void
+    {
+        $response = $this->get('/v1/year/2025');
+
+        $body = $this->decode($response);
+        self::assertCount(365, $body['data']);
+        self::assertSame('2025', $body['meta']['request']['year']);
+    }
+
+    public function testMetaEndpointAdvertisesCapabilities(): void
+    {
+        $response = $this->get('/v1/meta');
+
+        self::assertSame(200, $response->status);
+        $body = $this->decode($response);
+        self::assertSame([['id' => '1962', 'edition' => 'roman:rubricae-1960']], $body['data']['systems']);
+        self::assertSame(['la'], $body['data']['languages']);
+        self::assertSame(1583, $body['data']['range']['minYear']);
+        self::assertSame(2200, $body['data']['range']['maxYear']);
+        self::assertSame('universal', $body['data']['calendars'][0]['id']);
+        self::assertSame('sspx', $body['data']['calendars'][1]['id']);
+        self::assertSame('introibo:overlay:roman:sspx', $body['data']['calendars'][1]['particular']['id']);
+    }
+
     public function testMalformedDateReturns400(): void
     {
         $this->assertError($this->get('/v1/day/not-a-date'), 400, 'malformed_date');
+    }
+
+    public function testMalformedMonthReturns400(): void
+    {
+        $this->assertError($this->get('/v1/month/2026-13'), 400, 'malformed_date');
     }
 
     public function testOutOfRangeDateReturns422(): void

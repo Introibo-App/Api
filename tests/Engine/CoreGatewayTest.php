@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Introibo\Api\Engine\CoreGateway;
 use Introibo\Api\Query\CalendarQuery;
+use Introibo\Api\Query\RangeQuery;
 use PHPUnit\Framework\TestCase;
 
 final class CoreGatewayTest extends TestCase
@@ -31,6 +32,48 @@ final class CoreGatewayTest extends TestCase
         self::assertSame(3, $universal['celebration'][0]['rankOrdinal']);
         self::assertSame('roman:sanctorale:pius-x', $sspx['celebration'][0]['id']);
         self::assertSame(1, $sspx['celebration'][0]['rankOrdinal']);
+    }
+
+    public function testResolvesAMonthAsAnOrderedListOfDays(): void
+    {
+        $days = $this->gateway()->days(new RangeQuery(2026, 9, 'month', '2026-09', '1962', null, 'la'));
+
+        self::assertCount(30, $days);
+        self::assertSame('2026-09-01', $days[0]['date']);
+        self::assertSame('2026-09-30', $days[29]['date']);
+    }
+
+    public function testResolvesAWholeYearIncludingLeapYears(): void
+    {
+        $common = $this->gateway()->days(new RangeQuery(2025, null, 'year', '2025', '1962', null, 'la'));
+        $leap = $this->gateway()->days(new RangeQuery(2024, null, 'year', '2024', '1962', null, 'la'));
+
+        self::assertCount(365, $common);
+        self::assertSame('2025-01-01', $common[0]['date']);
+        self::assertSame('2025-12-31', $common[364]['date']);
+        self::assertCount(366, $leap);
+    }
+
+    public function testAMonthUnderTheOverlayCarriesTheElevation(): void
+    {
+        $days = $this->gateway()->days(new RangeQuery(2026, 9, 'month', '2026-09', '1962', 'sspx', 'la'));
+
+        self::assertSame('2026-09-03', $days[2]['date']);
+        self::assertSame(1, $days[2]['celebration'][0]['rankOrdinal']);
+    }
+
+    public function testSystemsDetailIsDiscoveryReady(): void
+    {
+        self::assertSame([['id' => '1962', 'edition' => 'roman:rubricae-1960']], $this->gateway()->systemsDetail());
+    }
+
+    public function testCalendarsDetailListsUniversalFirstThenParticulars(): void
+    {
+        $calendars = $this->gateway()->calendarsDetail();
+
+        self::assertSame('universal', $calendars[0]['id']);
+        self::assertNull($calendars[0]['particular']);
+        self::assertContains('sspx', array_column($calendars, 'id'));
     }
 
     public function testCapabilityListsAreDerivedFromCore(): void
