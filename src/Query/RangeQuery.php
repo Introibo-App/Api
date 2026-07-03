@@ -31,6 +31,12 @@ final readonly class RangeQuery
         return $this->calendar ?? CoreGateway::UNIVERSAL;
     }
 
+    /** The canonical static-cache key: the request as one filesystem-safe path. */
+    public function cacheKey(): string
+    {
+        return sprintf('v1/%s/%s/%s/%s', $this->rangeKey, $this->rangeValue, $this->system, $this->calendarLabel());
+    }
+
     /**
      * The request parameters echoed back in the response `meta`.
      *

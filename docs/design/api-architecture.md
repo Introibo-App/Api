@@ -108,6 +108,32 @@ can be added later **additively, with no client breakage**, because:
 So the pivot is a routing-table change, not a rewrite. The disciplines that keep it
 that way: handlers stay URL-shape-agnostic, and the envelope stays additive-only.
 
+## Static generation & the cold path
+
+The calendar reads are deterministic and immutable for a given data version, so they
+are served from a **static tier** and only *computed* on a cold miss (#13):
+
+- **`Cache\StaticStore`** — a filesystem store of pre-rendered response bodies, one
+  JSON file per request keyed by its canonical path (`v1/day/2026-09-03/1962/sspx`).
+  The whole tree is **namespaced by the data version** (a sanitised `dataVersion`
+  directory), so a corpus/engine/contract bump lands in a fresh directory and a
+  stale file can never be served; the rebuild-and-purge action (#28) simply drops
+  the old version's directory. No root configured (the dev/test default) → the store
+  is disabled and the service runs identically without it.
+- **`Cache\ResponseCache`** — read-through: a hit returns the stored bytes untouched;
+  a miss computes, **writes back** to the store, and returns. Either way the response
+  carries cache-friendly headers so the edge can hold it (#16). ETags + immutable,
+  version-keyed `Cache-Control` harden this in the caching epic (#17).
+- **`bin/generate-static.php`** — warms the store for a year range by replaying every
+  hot request (year, months, days × systems × calendars) through the **real kernel**
+  (#14). Because the kernel writes read-through, generation reuses the exact response
+  shape the live endpoints serve — there is no second serialiser to drift — and the
+  civil year is resolved once per (year, calendar).
+
+In production the web server serves an existing static file directly (a rewrite:
+try the file, else `public/index.php`), so the hot path never enters PHP; the
+read-through store is the origin's own fallback and the write-through populator.
+
 ## Framework posture
 
 **No framework.** A hand-rolled front controller (`public/index.php`) → `Kernel` →

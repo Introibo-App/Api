@@ -30,6 +30,12 @@ final readonly class CalendarQuery
         return $this->calendar ?? CoreGateway::UNIVERSAL;
     }
 
+    /** The canonical static-cache key: the request as one filesystem-safe path. */
+    public function cacheKey(): string
+    {
+        return sprintf('v1/day/%s/%s/%s', $this->dateString, $this->system, $this->calendarLabel());
+    }
+
     /**
      * The request parameters echoed back in the response `meta`, so a client sees
      * exactly which (date, system, calendar, language) the service resolved.

@@ -37,6 +37,9 @@ php -S 127.0.0.1:8080 -t public public/index.php
 #   → GET /v1/year/2026
 #   → GET /v1/meta      (supported systems, calendars, languages, range)
 #   → GET /v1/health
+
+# Pre-generate the static tier for a year range (data-version-namespaced):
+php bin/generate-static.php 2024 2030 ./build/static
 ```
 
 ## Licence
