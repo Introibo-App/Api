@@ -13,7 +13,8 @@ use Introibo\Api\Http\Response;
 /**
  * `GET /v1/health` — a liveness check that also proves the Core engine is wired and
  * loadable: it reports the service status and the live data-version stamp, which can
- * only be produced by resolving through Core.
+ * only be produced by resolving through Core. It is explicitly uncacheable, so a
+ * probe always reaches the origin.
  */
 final class HealthHandler implements Handler
 {
@@ -28,6 +29,6 @@ final class HealthHandler implements Handler
                 ['status' => 'ok', 'service' => 'introibo-api'],
                 Envelope::meta($this->core->dataVersion()),
             ),
-        );
+        )->withHeader('cache-control', 'no-store');
     }
 }

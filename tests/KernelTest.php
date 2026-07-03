@@ -145,6 +145,47 @@ final class KernelTest extends TestCase
         self::assertArrayHasKey('dataVersion', $body['meta']);
     }
 
+    public function testEveryResponseCarriesTheDataVersionHeader(): void
+    {
+        self::assertArrayHasKey('x-data-version', $this->get('/v1/day/1962-12-25')->headers);
+        self::assertArrayHasKey('x-data-version', $this->get('/v1/nope')->headers);
+    }
+
+    public function testCalendarResponsesCarryAnEtagAndImmutableCacheControl(): void
+    {
+        $response = $this->get('/v1/day/1962-12-25');
+
+        self::assertArrayHasKey('etag', $response->headers);
+        self::assertStringContainsString('immutable', $response->headers['cache-control']);
+    }
+
+    public function testConditionalGetReturns304WithoutABody(): void
+    {
+        $first = $this->get('/v1/day/1962-12-25');
+        $etag = $first->headers['etag'];
+
+        $second = (new Kernel())->handle(
+            new Request('GET', '/v1/day/1962-12-25', [], ['if-none-match' => $etag]),
+        );
+
+        self::assertSame(304, $second->status);
+        self::assertSame('', $second->body);
+        self::assertSame($etag, $second->headers['etag']);
+    }
+
+    public function testHealthIsNotCacheable(): void
+    {
+        self::assertSame('no-store', $this->get('/v1/health')->headers['cache-control']);
+    }
+
+    public function testMetaIsCacheableWithAnEtag(): void
+    {
+        $response = $this->get('/v1/meta');
+
+        self::assertArrayHasKey('etag', $response->headers);
+        self::assertStringContainsString('immutable', $response->headers['cache-control']);
+    }
+
     /**
      * @param array<string, string> $query
      */

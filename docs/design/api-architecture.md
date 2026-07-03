@@ -120,10 +120,14 @@ are served from a **static tier** and only *computed* on a cold miss (#13):
   stale file can never be served; the rebuild-and-purge action (#28) simply drops
   the old version's directory. No root configured (the dev/test default) → the store
   is disabled and the service runs identically without it.
-- **`Cache\ResponseCache`** — read-through: a hit returns the stored bytes untouched;
-  a miss computes, **writes back** to the store, and returns. Either way the response
-  carries cache-friendly headers so the edge can hold it (#16). ETags + immutable,
-  version-keyed `Cache-Control` harden this in the caching epic (#17).
+- **`Cache\ResponseCache`** + **`Cache\CacheHeaders`** — read-through: a hit returns
+  the stored bytes untouched; a miss computes, **writes back** to the store, and
+  returns. Every served response carries a strong `ETag` (a hash of `dataVersion|key`
+  — it changes exactly when content would, without hashing the body), an immutable
+  `Cache-Control` (`public, max-age=3600, s-maxage=604800, immutable`), and honours
+  conditional GETs with a bodiless `304`. `X-Data-Version` is stamped on **every**
+  response; `/v1/health` is `no-store`. Edge pairing is documented in
+  [docs/deploy/cloudflare.md](../deploy/cloudflare.md).
 - **`bin/generate-static.php`** — warms the store for a year range by replaying every
   hot request (year, months, days × systems × calendars) through the **real kernel**
   (#14). Because the kernel writes read-through, generation reuses the exact response
