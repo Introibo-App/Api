@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Introibo\Api\Tests;
 
+use Introibo\Api\Cache\StaticStore;
+use Introibo\Api\Engine\CoreGateway;
 use Introibo\Api\Http\Request;
 use Introibo\Api\Http\Response;
 use Introibo\Api\Kernel;
+use Introibo\Api\Tests\Support\TempDir;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,6 +18,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class KernelTest extends TestCase
 {
+    use TempDir;
+
     public function testDayEndpointReturnsTheResolvedDayInTheEnvelope(): void
     {
         $response = $this->get('/v1/day/1962-12-25');
@@ -104,6 +109,30 @@ final class KernelTest extends TestCase
         $response = (new Kernel())->handle(new Request('POST', '/v1/day/2026-09-03'));
 
         $this->assertError($response, 405, 'method_not_allowed');
+    }
+
+    public function testCalendarResponsesAreWrittenThroughTheStaticStore(): void
+    {
+        $root = $this->makeTempDir();
+        try {
+            $core = new CoreGateway();
+            $store = new StaticStore($root, $core->dataVersion());
+            $kernel = new Kernel($core, $store);
+
+            $first = $kernel->handle(new Request('GET', '/v1/day/2026-09-03', ['calendar' => 'sspx']));
+            $second = $kernel->handle(new Request('GET', '/v1/day/2026-09-03', ['calendar' => 'sspx']));
+
+            self::assertSame('MISS', $first->headers['x-cache']);
+            self::assertSame('HIT', $second->headers['x-cache']);
+            self::assertSame($first->body, $second->body);
+            self::assertArrayHasKey('cache-control', $first->headers);
+            self::assertNotNull(
+                $store->get('v1/day/2026-09-03/1962/sspx'),
+                'The day should be written to the static tier.',
+            );
+        } finally {
+            $this->removeDir($root);
+        }
     }
 
     public function testHealthEndpointIsLive(): void

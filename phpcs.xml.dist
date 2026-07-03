@@ -2,7 +2,8 @@
 <ruleset name="introibo-api">
     <description>Coding standard for introibo/api: PSR-12.</description>
 
-    <!-- Scan the front controller, the service source, and the test suite. -->
+    <!-- Scan the front controller, maintainer scripts, the source, and the tests. -->
+    <file>bin</file>
     <file>public</file>
     <file>src</file>
     <file>tests</file>
