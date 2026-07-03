@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Introibo\Api\Tests;
 
+use DateTimeImmutable;
+use DateTimeZone;
+use Introibo\Api\Auth\AccessControl;
+use Introibo\Api\Auth\InMemoryKeyStore;
+use Introibo\Api\Auth\KeyIssuer;
+use Introibo\Api\Auth\Tenant;
 use Introibo\Api\Cache\StaticStore;
 use Introibo\Api\Engine\CoreGateway;
 use Introibo\Api\Http\Request;
 use Introibo\Api\Http\Response;
 use Introibo\Api\Kernel;
+use Introibo\Api\Tests\Support\FixedClock;
 use Introibo\Api\Tests\Support\TempDir;
 use PHPUnit\Framework\TestCase;
 
@@ -184,6 +191,64 @@ final class KernelTest extends TestCase
 
         self::assertArrayHasKey('etag', $response->headers);
         self::assertStringContainsString('immutable', $response->headers['cache-control']);
+    }
+
+    public function testMeteredEndpointRequiresAKeyWhenAccessControlIsEnabled(): void
+    {
+        $kernel = $this->guardedKernel(new InMemoryKeyStore());
+
+        $response = $kernel->handle(new Request('GET', '/v1/day/1962-12-25'));
+
+        self::assertSame(401, $response->status);
+        self::assertSame('unauthenticated', $this->decode($response)['error']['code']);
+        self::assertArrayHasKey('x-data-version', $response->headers);
+    }
+
+    public function testValidKeyPassesTheGateAndCarriesRateHeaders(): void
+    {
+        $store = new InMemoryKeyStore();
+        $store->putTenant(new Tenant('t', 'Acme', 1000));
+        $issued = (new KeyIssuer($store))->issue('t', 'main', 60);
+
+        $response = $this->guardedKernel($store)->handle(
+            new Request('GET', '/v1/day/1962-12-25', [], ['authorization' => 'Bearer ' . $issued->secret]),
+        );
+
+        self::assertSame(200, $response->status);
+        self::assertSame('60', $response->headers['x-ratelimit-limit']);
+        self::assertArrayHasKey('x-ratelimit-remaining', $response->headers);
+    }
+
+    public function testHealthAndMetaSkipTheGate(): void
+    {
+        $kernel = $this->guardedKernel(new InMemoryKeyStore());
+
+        self::assertSame(200, $kernel->handle(new Request('GET', '/v1/health'))->status);
+        self::assertSame(200, $kernel->handle(new Request('GET', '/v1/meta'))->status);
+    }
+
+    public function testRateLimit429CarriesRetryAfterAndTheDataVersion(): void
+    {
+        $store = new InMemoryKeyStore();
+        $store->putTenant(new Tenant('t', 'Acme'));
+        $issued = (new KeyIssuer($store))->issue('t', 'main', 1);
+        $kernel = $this->guardedKernel($store);
+        $request = new Request('GET', '/v1/day/1962-12-25', [], ['authorization' => 'Bearer ' . $issued->secret]);
+
+        self::assertSame(200, $kernel->handle($request)->status);
+        $second = $kernel->handle($request);
+
+        self::assertSame(429, $second->status);
+        self::assertSame('rate_limited', $this->decode($second)['error']['code']);
+        self::assertArrayHasKey('retry-after', $second->headers);
+        self::assertArrayHasKey('x-data-version', $second->headers);
+    }
+
+    private function guardedKernel(InMemoryKeyStore $store): Kernel
+    {
+        $clock = new FixedClock(new DateTimeImmutable('2026-07-03 01:27:30', new DateTimeZone('UTC')));
+
+        return new Kernel(null, null, new AccessControl($store, $clock));
     }
 
     /**

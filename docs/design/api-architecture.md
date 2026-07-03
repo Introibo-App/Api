@@ -138,6 +138,31 @@ In production the web server serves an existing static file directly (a rewrite:
 try the file, else `public/index.php`), so the hot path never enters PHP; the
 read-through store is the origin's own fallback and the write-through populator.
 
+## Access control (keys, quotas, rate limits)
+
+The metered calendar endpoints (`/v1/day`, `/v1/month`, `/v1/year`) sit behind an
+access gate (#21); `/v1/health` and `/v1/meta` stay public. The gate is **open when
+no key store is configured** (the dev/test default and the R2-launch default), so
+enabling metering is a deploy-time switch, not a code change.
+
+- **`Auth\AccessControl`** — authenticates a request to an `ApiKey` (via
+  `Authorization: Bearer <key>` or `X-API-Key`), scopes it to that key's `Tenant`,
+  enforces the key's per-minute **rate limit** and the tenant's monthly **quota**,
+  and returns the `X-RateLimit-*` headers to echo. A failure is the canonical error:
+  `401 unauthenticated`, or `429 rate_limited` / `429 quota_exceeded` (the rate 429
+  carries `Retry-After`). Wrapped around handlers by `Auth\GuardedHandler`.
+- **Keys are hashes.** Only `sha256(secret)` is ever stored; the plaintext is shown
+  once at issue (`KeyIssuer::issue`) and never again. `rotate` deactivates the old
+  key and mints a new one; `revoke` deactivates without deleting.
+- **`Auth\KeyStore`** is the one storage seam (#22): `InMemoryKeyStore` (the tested
+  double) and `PdoKeyStore` (MySQL, `sql/schema.sql`). Counters are **aggregate** —
+  one upserted row per (tenant, month) and per (key, minute), never a row per
+  request. `bin/api-key.php` is the maintainer CLI for tenants and keys.
+
+The MySQL database is the maintainer-provisioned half; the logic is proven against
+the in-memory store, and `AccessControl::fromEnvironment()` wires MySQL when
+`INTROIBO_DB_DSN` is set.
+
 ## Framework posture
 
 **No framework.** A hand-rolled front controller (`public/index.php`) → `Kernel` →

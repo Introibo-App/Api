@@ -19,18 +19,24 @@ enum ErrorCode: string
     case UNSUPPORTED_LANGUAGE = 'unsupported_language';
     case NOT_FOUND = 'not_found';
     case METHOD_NOT_ALLOWED = 'method_not_allowed';
+    case UNAUTHENTICATED = 'unauthenticated';
+    case RATE_LIMITED = 'rate_limited';
+    case QUOTA_EXCEEDED = 'quota_exceeded';
     case INTERNAL = 'internal_error';
 
     public function status(): int
     {
         return match ($this) {
             self::MALFORMED_DATE => 400,
+            self::UNAUTHENTICATED => 401,
             self::DATE_OUT_OF_RANGE,
             self::UNSUPPORTED_SYSTEM,
             self::UNKNOWN_CALENDAR,
             self::UNSUPPORTED_LANGUAGE => 422,
             self::NOT_FOUND => 404,
             self::METHOD_NOT_ALLOWED => 405,
+            self::RATE_LIMITED,
+            self::QUOTA_EXCEEDED => 429,
             self::INTERNAL => 500,
         };
     }
@@ -45,6 +51,9 @@ enum ErrorCode: string
             self::UNSUPPORTED_LANGUAGE => 'The requested language is not supported.',
             self::NOT_FOUND => 'No resource matches this path.',
             self::METHOD_NOT_ALLOWED => 'The HTTP method is not allowed for this path.',
+            self::UNAUTHENTICATED => 'A valid API key is required.',
+            self::RATE_LIMITED => 'Too many requests — slow down.',
+            self::QUOTA_EXCEEDED => 'The account request quota has been exhausted.',
             self::INTERNAL => 'The service encountered an unexpected error.',
         };
     }
