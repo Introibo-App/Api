@@ -42,6 +42,11 @@ php -S 127.0.0.1:8080 -t public public/index.php
 php bin/generate-static.php 2024 2030 ./build/static
 ```
 
+Access control (API keys, quotas, rate limits) is **off until a key store is
+configured** — set `INTROIBO_DB_DSN` (schema in [`sql/schema.sql`](sql/schema.sql))
+and manage tenants/keys with `php bin/api-key.php` (`tenant` / `issue` / `rotate` /
+`revoke`). Health and discovery stay public.
+
 ## Licence
 
 © 2026 Introibo. Licensed under **AGPL-3.0-or-later** (see [LICENSE](LICENSE)). The compiled
