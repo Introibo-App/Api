@@ -3,7 +3,7 @@
 _A plain-language overview of where the Introibo API is headed. Each version links to its tracking
 milestone and the issues that make it up (issue links are added once the backlog is imported)._
 
-_Last updated: 2026-07-02_
+_Last updated: 2026-07-03_
 
 ## Release train
 - **R1 — Groundwork.** The service skeleton and the pre-launch contract decisions surfaced over the
@@ -12,13 +12,19 @@ _Last updated: 2026-07-02_
   vehicle behind the Ordo plugin on 3mi.org.
 - **R3+.** Everything else, in the build order below.
 
-## 🚧 In progress — [v0.1.0](https://github.com/Introibo-App/Api/milestone/1)
-**The platform comes online.** A versioned `/v1` service and the calendar endpoints — the **SSPX release
-vehicle**: cache-first with static generation, ETags and a data-version stamp, API keys with quotas and
-rate limits, cache-purge + data versioning, and an acceptable-use policy.
+## ✅ Code-complete on `develop` — [v0.1.0](https://github.com/Introibo-App/Api/milestone/1)
+**The platform comes online.** A versioned `/v1` service over Core (`introibo/core`, no liturgical logic
+of its own): the calendar endpoints (`/day`, `/month`, `/year`, `/meta`) with the **SSPX** calendar via
+`?calendar=sspx`, cache-first with static generation, ETags + immutable `Cache-Control` + an
+`X-Data-Version` stamp, API keys with per-tenant quotas and per-key rate limits, admin rebuild/cache-purge,
+and the AUP + terms endpoints. All six epics merged; architecture in
+[`docs/design/api-architecture.md`](docs/design/api-architecture.md). **Remaining for the R2 launch is
+infrastructure, not code:** provision the MySQL database (`sql/schema.sql`), a Cloudflare zone, and the
+DreamHost deploy target, then cut the v0.1.0 release.
 
 ## 🗓️ Next — [v0.2.0](https://github.com/Introibo-App/Api/milestone/3)
-**Particular-calendar presets.** SSPX, FSSP, ICKSP, and the Cum sanctissima toggle.
+**Particular-calendar presets.** FSSP, ICKSP, and the Cum sanctissima toggle (the SSPX overlay already
+ships in v0.1 via Core). FSSP/ICKSP land as Core adds their overlays.
 
 ## 🔭 Future
 - **[v0.3.0](https://github.com/Introibo-App/Api/milestone/4) — Outputs & integrations.** iCal feed +
