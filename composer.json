@@ -4,10 +4,54 @@
     "type": "project",
     "license": "AGPL-3.0-or-later",
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.2",
+        "ext-json": "*",
+        "introibo/core": "dev-develop"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.10",
-        "phpstan/phpstan": "^1.12"
-    }
+        "phpunit/phpunit": "^11.0",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "squizlabs/php_codesniffer": "^3.11"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Introibo-App/Core"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Introibo\\Api\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Introibo\\Api\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "lint:fix": "phpcbf",
+        "analyse": "phpstan analyse",
+        "test": "phpunit",
+        "check": [
+            "@lint",
+            "@analyse",
+            "@test"
+        ]
+    },
+    "scripts-descriptions": {
+        "lint": "Check coding standards (PSR-12) with PHP_CodeSniffer.",
+        "lint:fix": "Auto-fix coding-standard violations with phpcbf.",
+        "analyse": "Run PHPStan static analysis at the configured level.",
+        "test": "Run the PHPUnit test suite.",
+        "check": "Run all quality gates locally (lint + analyse + test)."
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {}
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

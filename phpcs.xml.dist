@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset name="introibo-api">
+    <description>Coding standard for introibo/api: PSR-12.</description>
+
+    <!-- Scan the front controller, the service source, and the test suite. -->
+    <file>public</file>
+    <file>src</file>
+    <file>tests</file>
+
+    <!-- Report paths relative to the project root; run in parallel with colour. -->
+    <arg name="basepath" value="."/>
+    <arg name="parallel" value="4"/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <rule ref="PSR12"/>
+</ruleset>
