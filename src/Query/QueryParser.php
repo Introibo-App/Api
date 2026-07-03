@@ -35,6 +35,55 @@ final class QueryParser
         );
     }
 
+    public function parseMonth(string $rawMonth, Request $request): RangeQuery
+    {
+        if (preg_match('/^\d{4}-\d{2}$/', $rawMonth) !== 1) {
+            throw ApiException::of(
+                ErrorCode::MALFORMED_DATE,
+                sprintf('"%s" is not an ISO year-month in the form YYYY-MM.', $rawMonth),
+            );
+        }
+
+        [$year, $month] = array_map('intval', explode('-', $rawMonth));
+        if ($month < 1 || $month > 12) {
+            throw ApiException::of(ErrorCode::MALFORMED_DATE, sprintf('"%s" is not a real month.', $rawMonth));
+        }
+        $this->assertYearInRange($year);
+
+        return new RangeQuery(
+            $year,
+            $month,
+            'month',
+            $rawMonth,
+            $this->parseSystem($request),
+            $this->parseCalendar($request),
+            $this->parseLanguage($request),
+        );
+    }
+
+    public function parseYear(string $rawYear, Request $request): RangeQuery
+    {
+        if (preg_match('/^\d{4}$/', $rawYear) !== 1) {
+            throw ApiException::of(
+                ErrorCode::MALFORMED_DATE,
+                sprintf('"%s" is not a four-digit year in the form YYYY.', $rawYear),
+            );
+        }
+
+        $year = (int) $rawYear;
+        $this->assertYearInRange($year);
+
+        return new RangeQuery(
+            $year,
+            null,
+            'year',
+            $rawYear,
+            $this->parseSystem($request),
+            $this->parseCalendar($request),
+            $this->parseLanguage($request),
+        );
+    }
+
     private function parseDate(string $raw): DateTimeImmutable
     {
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw) !== 1) {
@@ -49,17 +98,7 @@ final class QueryParser
             throw ApiException::of(ErrorCode::MALFORMED_DATE, sprintf('"%s" is not a real calendar date.', $raw));
         }
 
-        if ($year < CoreGateway::MIN_YEAR || $year > CoreGateway::MAX_YEAR) {
-            throw ApiException::of(
-                ErrorCode::DATE_OUT_OF_RANGE,
-                sprintf(
-                    'The year %d is outside the supported range %d–%d.',
-                    $year,
-                    CoreGateway::MIN_YEAR,
-                    CoreGateway::MAX_YEAR,
-                ),
-            );
-        }
+        $this->assertYearInRange($year);
 
         $date = DateTimeImmutable::createFromFormat('!Y-m-d', $raw, new DateTimeZone('UTC'));
         if ($date === false) {
@@ -119,5 +158,20 @@ final class QueryParser
         }
 
         return $language;
+    }
+
+    private function assertYearInRange(int $year): void
+    {
+        if ($year < CoreGateway::MIN_YEAR || $year > CoreGateway::MAX_YEAR) {
+            throw ApiException::of(
+                ErrorCode::DATE_OUT_OF_RANGE,
+                sprintf(
+                    'The year %d is outside the supported range %d–%d.',
+                    $year,
+                    CoreGateway::MIN_YEAR,
+                    CoreGateway::MAX_YEAR,
+                ),
+            );
+        }
     }
 }

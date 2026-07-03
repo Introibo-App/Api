@@ -69,6 +69,71 @@ final class QueryParserTest extends TestCase
         $this->assertRejects('2026-09-15', ['lang' => 'tlh'], 'unsupported_language', 422);
     }
 
+    public function testParsesAValidMonth(): void
+    {
+        $query = $this->parser()->parseMonth('2026-09', $this->request(['calendar' => 'sspx']));
+
+        self::assertSame(2026, $query->year);
+        self::assertSame(9, $query->month);
+        self::assertSame('sspx', $query->calendar);
+        self::assertSame(
+            ['month' => '2026-09', 'system' => '1962', 'calendar' => 'sspx', 'language' => 'la'],
+            $query->parameters(),
+        );
+    }
+
+    public function testParsesAValidYear(): void
+    {
+        $query = $this->parser()->parseYear('2026', $this->request());
+
+        self::assertSame(2026, $query->year);
+        self::assertNull($query->month);
+        self::assertSame(
+            ['year' => '2026', 'system' => '1962', 'calendar' => 'universal', 'language' => 'la'],
+            $query->parameters(),
+        );
+    }
+
+    public function testRejectsAMalformedMonth(): void
+    {
+        try {
+            $this->parser()->parseMonth('2026-9', $this->request());
+            self::fail('Expected a malformed_date ApiException.');
+        } catch (ApiException $e) {
+            self::assertSame('malformed_date', $e->error()->code);
+        }
+    }
+
+    public function testRejectsAnImpossibleMonth(): void
+    {
+        try {
+            $this->parser()->parseMonth('2026-13', $this->request());
+            self::fail('Expected a malformed_date ApiException.');
+        } catch (ApiException $e) {
+            self::assertSame('malformed_date', $e->error()->code);
+        }
+    }
+
+    public function testRejectsAMalformedYear(): void
+    {
+        try {
+            $this->parser()->parseYear('26', $this->request());
+            self::fail('Expected a malformed_date ApiException.');
+        } catch (ApiException $e) {
+            self::assertSame('malformed_date', $e->error()->code);
+        }
+    }
+
+    public function testRejectsAnOutOfRangeYearForARange(): void
+    {
+        try {
+            $this->parser()->parseYear('3000', $this->request());
+            self::fail('Expected a date_out_of_range ApiException.');
+        } catch (ApiException $e) {
+            self::assertSame('date_out_of_range', $e->error()->code);
+        }
+    }
+
     /**
      * @param array<string, string> $query
      */

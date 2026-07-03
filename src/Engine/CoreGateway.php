@@ -9,17 +9,21 @@ use DateTimeZone;
 use Introibo\Api\Contract\ApiException;
 use Introibo\Api\Contract\ErrorCode;
 use Introibo\Api\Query\CalendarQuery;
+use Introibo\Api\Query\RangeQuery;
+use Introibo\Core\Contract\CalendarDescriptor;
+use Introibo\Core\Contract\DayContract;
 use Introibo\Core\Overlay\CalendarCatalog;
+use Introibo\Core\Precedence\ResolvedYear;
 use Throwable;
-
-use function Introibo\Core\contract;
 
 /**
  * The single boundary between the API and the Core engine (#6). Every piece of
  * liturgical truth the service returns comes through here — no handler, parser, or
- * cache ever calls Core directly or reimplements a rule. It also owns the small set
- * of API-facing capability lists (systems, calendars, languages) and the supported
- * date range, all derived from what Core actually offers so discovery stays honest.
+ * cache ever calls Core directly or reimplements a rule. It resolves a civil year
+ * once via {@see CalendarCatalog} and serialises days off that index, so a month or
+ * a whole year costs one resolution. It also owns the small set of API-facing
+ * capability lists (systems, calendars, languages) and the supported date range,
+ * all derived from what Core actually offers so discovery stays honest.
  */
 final class CoreGateway
 {
@@ -44,19 +48,48 @@ final class CoreGateway
 
     private ?CalendarCatalog $catalog = null;
 
+    /** @var array<string, ResolvedYear> Resolved civil years, keyed by "year|calendar". */
+    private array $resolvedYears = [];
+
+    /** @var array<string, CalendarDescriptor|null> Descriptors, keyed by calendar. */
+    private array $descriptors = [];
+
     private ?string $dataVersion = null;
 
     /**
      * The resolved liturgical day for a query, as the frozen Core output contract
-     * (#52). A validated query cannot make Core throw, so any Throwable here is an
-     * internal fault surfaced as an opaque 500 — never leaked to the client.
+     * (#52).
      *
      * @return array<string, mixed>
      */
     public function day(CalendarQuery $query): array
     {
         try {
-            return contract($query->date, false, $query->calendar);
+            return $this->serialise((int) $query->date->format('Y'), $query->calendar, $query->date);
+        } catch (Throwable $e) {
+            throw ApiException::of(ErrorCode::INTERNAL, null, $e);
+        }
+    }
+
+    /**
+     * Every resolved day in a month or a whole year, ascending by date — each the
+     * frozen Core output contract. The civil year is resolved once and every day is
+     * read off it, so the range costs a single resolution.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function days(RangeQuery $query): array
+    {
+        try {
+            $resolved = $this->resolvedYear($query->year, $query->calendar);
+            $descriptor = $this->descriptor($query->calendar);
+
+            $days = [];
+            foreach ($this->datesIn($query) as $date) {
+                $days[] = DayContract::from($resolved->day($date), $resolved->provenance(), $descriptor)->toArray();
+            }
+
+            return $days;
         } catch (Throwable $e) {
             throw ApiException::of(ErrorCode::INTERNAL, null, $e);
         }
@@ -81,6 +114,20 @@ final class CoreGateway
     }
 
     /**
+     * The systems as discovery records — the label and the Core edition it resolves
+     * under.
+     *
+     * @return list<array{id: string, edition: string}>
+     */
+    public function systemsDetail(): array
+    {
+        return array_map(fn (string $system): array => [
+            'id' => $system,
+            'edition' => $this->editionFor($system),
+        ], $this->systems());
+    }
+
+    /**
      * The calendars the service supports: the universal 1962 base plus every
      * particular calendar Core ships as an overlay.
      *
@@ -89,6 +136,32 @@ final class CoreGateway
     public function calendars(): array
     {
         return array_merge([self::UNIVERSAL], $this->catalog()->particularCalendars());
+    }
+
+    /**
+     * The calendars as discovery records: the universal base (no particular block)
+     * plus each particular calendar with its contract descriptor.
+     *
+     * @return list<array{id: string, name: string, particular: array{id: string, name: string}|null}>
+     */
+    public function calendarsDetail(): array
+    {
+        $calendars = [[
+            'id' => self::UNIVERSAL,
+            'name' => 'Universal 1962 calendar',
+            'particular' => null,
+        ]];
+
+        foreach ($this->catalog()->particularCalendars() as $slug) {
+            $descriptor = $this->calendarDescriptor($slug);
+            $calendars[] = [
+                'id' => $slug,
+                'name' => $descriptor['name'] ?? $slug,
+                'particular' => $descriptor,
+            ];
+        }
+
+        return $calendars;
     }
 
     /**
@@ -122,7 +195,7 @@ final class CoreGateway
      */
     public function calendarDescriptor(?string $calendar): ?array
     {
-        return $this->catalog()->descriptor($calendar)?->toArray();
+        return $this->descriptor($calendar)?->toArray();
     }
 
     /**
@@ -134,7 +207,7 @@ final class CoreGateway
     public function dataVersion(): string
     {
         if ($this->dataVersion === null) {
-            $reference = contract(new DateTimeImmutable('2000-01-01', new DateTimeZone('UTC')));
+            $reference = $this->serialise(2000, null, new DateTimeImmutable('2000-01-01', new DateTimeZone('UTC')));
             $this->dataVersion = sprintf(
                 'c%s+e%s+d%s',
                 (string) ($reference['contractVersion'] ?? '0'),
@@ -144,6 +217,58 @@ final class CoreGateway
         }
 
         return $this->dataVersion;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function serialise(int $year, ?string $calendar, DateTimeImmutable $date): array
+    {
+        $resolved = $this->resolvedYear($year, $calendar);
+
+        return DayContract::from(
+            $resolved->day($date),
+            $resolved->provenance(),
+            $this->descriptor($calendar),
+        )->toArray();
+    }
+
+    /**
+     * The dates the range spans, ascending — a whole civil year or one month.
+     *
+     * @return list<DateTimeImmutable>
+     */
+    private function datesIn(RangeQuery $query): array
+    {
+        $timezone = new DateTimeZone('UTC');
+        $start = $query->month === null
+            ? new DateTimeImmutable(sprintf('%04d-01-01', $query->year), $timezone)
+            : new DateTimeImmutable(sprintf('%04d-%02d-01', $query->year, $query->month), $timezone);
+        $end = $start->modify($query->month === null ? '+1 year' : '+1 month');
+
+        $dates = [];
+        for ($date = $start; $date < $end; $date = $date->modify('+1 day')) {
+            $dates[] = $date;
+        }
+
+        return $dates;
+    }
+
+    private function resolvedYear(int $year, ?string $calendar): ResolvedYear
+    {
+        $key = $year . '|' . ($calendar ?? '');
+
+        return $this->resolvedYears[$key] ??= $this->catalog()->resolver($calendar)->resolveYear($year);
+    }
+
+    private function descriptor(?string $calendar): ?CalendarDescriptor
+    {
+        $key = $calendar ?? '';
+        if (!array_key_exists($key, $this->descriptors)) {
+            $this->descriptors[$key] = $this->catalog()->descriptor($calendar);
+        }
+
+        return $this->descriptors[$key];
     }
 
     private function catalog(): CalendarCatalog

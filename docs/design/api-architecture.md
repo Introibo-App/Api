@@ -68,6 +68,10 @@ GET /v1/health          (liveness)
   `e`, corpus data `d`). Clients key a cache on it; the caching layer (#17) derives
   ETags and static-file versions from it.
 - `meta.request` echoes the normalised parameters the service actually resolved.
+- **Collections** (`/month`, `/year`) return `data` as a list of day contracts
+  ordered ascending by date — each self-describing via its own `date` field — and
+  add `meta.count`. The whole civil year is resolved once, so a range costs a
+  single resolution.
 - **Additive-only.** New `meta` fields and new `data` keys (as Core's contract
   grows) never break a client. A removal or repurposing would be a `/v2`.
 

@@ -33,6 +33,9 @@ composer install            # pulls in introibo/core
 composer check              # PSR-12 lint + PHPStan + PHPUnit — the CI gate
 php -S 127.0.0.1:8080 -t public public/index.php
 #   → GET /v1/day/2026-09-03?calendar=sspx
+#   → GET /v1/month/2026-09
+#   → GET /v1/year/2026
+#   → GET /v1/meta      (supported systems, calendars, languages, range)
 #   → GET /v1/health
 ```
 
