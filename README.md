@@ -24,7 +24,17 @@ no Python.
 ## Development
 
 Work branches off `develop`, lands via squash PRs with Conventional-Commit titles, and releases are
-cut automatically by release-please.
+cut automatically by release-please. The engine is consumed as the `introibo/core` Composer
+dependency (pinned by `composer.lock`); the API adds no liturgical logic of its own. The
+architecture is documented in [docs/design/api-architecture.md](docs/design/api-architecture.md).
+
+```sh
+composer install            # pulls in introibo/core
+composer check              # PSR-12 lint + PHPStan + PHPUnit — the CI gate
+php -S 127.0.0.1:8080 -t public public/index.php
+#   → GET /v1/day/2026-09-03?calendar=sspx
+#   → GET /v1/health
+```
 
 ## Licence
 

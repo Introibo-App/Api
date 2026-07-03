@@ -11,6 +11,7 @@
 *.log
 *.cache
 .phpunit.result.cache
+.phpunit.cache/
 .phpcs.cache
 
 # Local env / secrets
