@@ -17,7 +17,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Introibo-App/Core"
+            "url": "https://github.com/DirectoriumApp/Core"
         }
     ],
     "autoload": {
