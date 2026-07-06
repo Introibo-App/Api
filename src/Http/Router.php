@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Http;
+namespace Directorium\Api\Http;
 
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Contract\ErrorCode;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Contract\ErrorCode;
 
 /**
  * A tiny path router. Routes are literal paths with `{name}` placeholders that

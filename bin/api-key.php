@@ -15,9 +15,9 @@
 
 declare(strict_types=1);
 
-use Introibo\Api\Auth\KeyIssuer;
-use Introibo\Api\Auth\PdoKeyStore;
-use Introibo\Api\Auth\Tenant;
+use Directorium\Api\Auth\KeyIssuer;
+use Directorium\Api\Auth\PdoKeyStore;
+use Directorium\Api\Auth\Tenant;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 

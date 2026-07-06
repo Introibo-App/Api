@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Cache;
+namespace Directorium\Api\Tests\Cache;
 
-use Introibo\Api\Cache\StaticStore;
-use Introibo\Api\Tests\Support\TempDir;
+use Directorium\Api\Cache\StaticStore;
+use Directorium\Api\Tests\Support\TempDir;
 use PHPUnit\Framework\TestCase;
 
 final class StaticStoreTest extends TestCase

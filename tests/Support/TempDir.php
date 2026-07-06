@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Support;
+namespace Directorium\Api\Tests\Support;
 
 /**
  * A unique temporary directory for tests that touch the static-cache filesystem,
@@ -12,7 +12,7 @@ trait TempDir
 {
     private function makeTempDir(): string
     {
-        return sys_get_temp_dir() . '/introibo-api-' . bin2hex(random_bytes(6));
+        return sys_get_temp_dir() . '/directorium-api-' . bin2hex(random_bytes(6));
     }
 
     private function removeDir(string $dir): void

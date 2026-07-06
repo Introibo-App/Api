@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Handler;
+namespace Directorium\Api\Handler;
 
-use Introibo\Api\Cache\ResponseCache;
-use Introibo\Api\Contract\Envelope;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Http\Handler;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
-use Introibo\Api\Query\QueryParser;
-use Introibo\Api\Query\RangeQuery;
+use Directorium\Api\Cache\ResponseCache;
+use Directorium\Api\Contract\Envelope;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Http\Handler;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
+use Directorium\Api\Query\QueryParser;
+use Directorium\Api\Query\RangeQuery;
 
 /**
  * Shared machinery for the range endpoints (a month, a whole year): parse the span,

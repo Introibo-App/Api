@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Http;
+namespace Directorium\Api\Http;
 
 /**
  * A route handler: turns a matched request (plus any path parameters the router

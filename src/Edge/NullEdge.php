@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Edge;
+namespace Directorium\Api\Edge;
 
 /**
  * The no-op edge: used when no CDN is configured, so the admin actions run without an

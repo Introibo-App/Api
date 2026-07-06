@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Contract;
+namespace Directorium\Api\Tests\Contract;
 
-use Introibo\Api\Contract\Envelope;
+use Directorium\Api\Contract\Envelope;
 use PHPUnit\Framework\TestCase;
 
 final class EnvelopeTest extends TestCase

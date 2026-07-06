@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Cache;
+namespace Directorium\Api\Cache;
 
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
 
 /**
  * The read-through cache for calendar responses (#15, #16, #18). A handler asks it to

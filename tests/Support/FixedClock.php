@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Support;
+namespace Directorium\Api\Tests\Support;
 
 use DateTimeImmutable;
-use Introibo\Api\Auth\Clock;
+use Directorium\Api\Auth\Clock;
 
 /**
  * A clock frozen at a chosen instant, so quota periods and rate-limit windows are

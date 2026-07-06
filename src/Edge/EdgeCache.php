@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Edge;
+namespace Directorium\Api\Edge;
 
 /**
  * The edge (CDN) cache the origin can purge (#29). The service depends on this seam;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Auth;
+namespace Directorium\Api\Auth;
 
 /**
  * Persistence for tenants, API keys, and the aggregate counters that back quotas

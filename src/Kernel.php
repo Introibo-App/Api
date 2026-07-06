@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api;
+namespace Directorium\Api;
 
-use Introibo\Api\Admin\AdminGate;
-use Introibo\Api\Auth\AccessControl;
-use Introibo\Api\Auth\GuardedHandler;
-use Introibo\Api\Cache\ResponseCache;
-use Introibo\Api\Cache\StaticStore;
-use Introibo\Api\Contract\ApiError;
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Edge\CloudflareEdge;
-use Introibo\Api\Edge\EdgeCache;
-use Introibo\Api\Edge\NullEdge;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Handler\DayHandler;
-use Introibo\Api\Handler\HealthHandler;
-use Introibo\Api\Handler\MetaHandler;
-use Introibo\Api\Handler\MonthHandler;
-use Introibo\Api\Handler\PolicyHandler;
-use Introibo\Api\Handler\PurgeHandler;
-use Introibo\Api\Handler\RebuildHandler;
-use Introibo\Api\Handler\YearHandler;
-use Introibo\Api\Http\Handler;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
-use Introibo\Api\Http\Router;
-use Introibo\Api\Legal\Policies;
-use Introibo\Api\Query\QueryParser;
+use Directorium\Api\Admin\AdminGate;
+use Directorium\Api\Auth\AccessControl;
+use Directorium\Api\Auth\GuardedHandler;
+use Directorium\Api\Cache\ResponseCache;
+use Directorium\Api\Cache\StaticStore;
+use Directorium\Api\Contract\ApiError;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Edge\CloudflareEdge;
+use Directorium\Api\Edge\EdgeCache;
+use Directorium\Api\Edge\NullEdge;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Handler\DayHandler;
+use Directorium\Api\Handler\HealthHandler;
+use Directorium\Api\Handler\MetaHandler;
+use Directorium\Api\Handler\MonthHandler;
+use Directorium\Api\Handler\PolicyHandler;
+use Directorium\Api\Handler\PurgeHandler;
+use Directorium\Api\Handler\RebuildHandler;
+use Directorium\Api\Handler\YearHandler;
+use Directorium\Api\Http\Handler;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
+use Directorium\Api\Http\Router;
+use Directorium\Api\Legal\Policies;
+use Directorium\Api\Query\QueryParser;
 use Throwable;
 
 /**

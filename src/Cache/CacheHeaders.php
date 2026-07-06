@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Cache;
+namespace Directorium\Api\Cache;
 
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
 
 /**
  * The HTTP-caching semantics for cacheable responses (#18): a strong ETag, an

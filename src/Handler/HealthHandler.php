@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Handler;
+namespace Directorium\Api\Handler;
 
-use Introibo\Api\Contract\Envelope;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Http\Handler;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
+use Directorium\Api\Contract\Envelope;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Http\Handler;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
 
 /**
  * `GET /v1/health` — a liveness check that also proves the Core engine is wired and
@@ -26,7 +26,7 @@ final class HealthHandler implements Handler
     {
         return Response::json(
             Envelope::of(
-                ['status' => 'ok', 'service' => 'introibo-api'],
+                ['status' => 'ok', 'service' => 'directorium-api'],
                 Envelope::meta($this->core->dataVersion()),
             ),
         )->withHeader('cache-control', 'no-store');

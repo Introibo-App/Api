@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Cache;
+namespace Directorium\Api\Tests\Cache;
 
-use Introibo\Api\Cache\CacheHeaders;
-use Introibo\Api\Cache\ResponseCache;
-use Introibo\Api\Cache\StaticStore;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Tests\Support\TempDir;
+use Directorium\Api\Cache\CacheHeaders;
+use Directorium\Api\Cache\ResponseCache;
+use Directorium\Api\Cache\StaticStore;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Tests\Support\TempDir;
 use PHPUnit\Framework\TestCase;
 
 final class ResponseCacheTest extends TestCase

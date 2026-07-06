@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests;
+namespace Directorium\Api\Tests;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Introibo\Api\Admin\AdminGate;
-use Introibo\Api\Auth\AccessControl;
-use Introibo\Api\Auth\InMemoryKeyStore;
-use Introibo\Api\Auth\KeyIssuer;
-use Introibo\Api\Auth\Tenant;
-use Introibo\Api\Cache\StaticStore;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
-use Introibo\Api\Kernel;
-use Introibo\Api\Tests\Support\FixedClock;
-use Introibo\Api\Tests\Support\RecordingEdge;
-use Introibo\Api\Tests\Support\TempDir;
+use Directorium\Api\Admin\AdminGate;
+use Directorium\Api\Auth\AccessControl;
+use Directorium\Api\Auth\InMemoryKeyStore;
+use Directorium\Api\Auth\KeyIssuer;
+use Directorium\Api\Auth\Tenant;
+use Directorium\Api\Cache\StaticStore;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
+use Directorium\Api\Kernel;
+use Directorium\Api\Tests\Support\FixedClock;
+use Directorium\Api\Tests\Support\RecordingEdge;
+use Directorium\Api\Tests\Support\TempDir;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -85,7 +85,7 @@ final class KernelTest extends TestCase
         self::assertSame(2200, $body['data']['range']['maxYear']);
         self::assertSame('universal', $body['data']['calendars'][0]['id']);
         self::assertSame('sspx', $body['data']['calendars'][1]['id']);
-        self::assertSame('introibo:overlay:roman:sspx', $body['data']['calendars'][1]['particular']['id']);
+        self::assertSame('directorium:overlay:roman:sspx', $body['data']['calendars'][1]['particular']['id']);
     }
 
     public function testMalformedDateReturns400(): void

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Auth;
+namespace Directorium\Api\Tests\Auth;
 
-use Introibo\Api\Auth\ApiKey;
-use Introibo\Api\Auth\InMemoryKeyStore;
-use Introibo\Api\Auth\Tenant;
+use Directorium\Api\Auth\ApiKey;
+use Directorium\Api\Auth\InMemoryKeyStore;
+use Directorium\Api\Auth\Tenant;
 use PHPUnit\Framework\TestCase;
 
 final class InMemoryKeyStoreTest extends TestCase

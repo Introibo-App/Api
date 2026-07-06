@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Auth;
+namespace Directorium\Api\Tests\Auth;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Introibo\Api\Auth\AccessControl;
-use Introibo\Api\Auth\InMemoryKeyStore;
-use Introibo\Api\Auth\KeyIssuer;
-use Introibo\Api\Auth\Tenant;
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Tests\Support\FixedClock;
+use Directorium\Api\Auth\AccessControl;
+use Directorium\Api\Auth\InMemoryKeyStore;
+use Directorium\Api\Auth\KeyIssuer;
+use Directorium\Api\Auth\Tenant;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Tests\Support\FixedClock;
 use PHPUnit\Framework\TestCase;
 
 final class AccessControlTest extends TestCase

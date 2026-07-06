@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Auth;
+namespace Directorium\Api\Auth;
 
 /**
  * An API consumer account. Requests authenticate to a tenant (via one of its keys)

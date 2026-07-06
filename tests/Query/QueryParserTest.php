@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Query;
+namespace Directorium\Api\Tests\Query;
 
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Query\QueryParser;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Query\QueryParser;
 use PHPUnit\Framework\TestCase;
 
 final class QueryParserTest extends TestCase

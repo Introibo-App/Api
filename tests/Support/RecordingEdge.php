@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Support;
+namespace Directorium\Api\Tests\Support;
 
-use Introibo\Api\Edge\EdgeCache;
+use Directorium\Api\Edge\EdgeCache;
 
 /**
  * An {@see EdgeCache} double that counts purges, so admin actions can be asserted

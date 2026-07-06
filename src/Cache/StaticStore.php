@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Cache;
+namespace Directorium\Api\Cache;
 
 use RuntimeException;
 

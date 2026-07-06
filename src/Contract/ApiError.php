@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Contract;
+namespace Directorium\Api\Contract;
 
 /**
  * A single, uniform error the whole service speaks. Every failing request — a bad

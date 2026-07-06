@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Engine;
+namespace Directorium\Api\Tests\Engine;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Query\CalendarQuery;
-use Introibo\Api\Query\RangeQuery;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Query\CalendarQuery;
+use Directorium\Api\Query\RangeQuery;
 use PHPUnit\Framework\TestCase;
 
 final class CoreGatewayTest extends TestCase
@@ -108,7 +108,7 @@ final class CoreGatewayTest extends TestCase
 
         $descriptor = $gateway->calendarDescriptor('sspx');
         self::assertNotNull($descriptor);
-        self::assertSame('introibo:overlay:roman:sspx', $descriptor['id']);
+        self::assertSame('directorium:overlay:roman:sspx', $descriptor['id']);
         self::assertSame('Society of Saint Pius X', $descriptor['name']);
     }
 

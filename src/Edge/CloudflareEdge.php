@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Edge;
+namespace Directorium\Api\Edge;
 
 use RuntimeException;
 

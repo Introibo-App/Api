@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Http;
+namespace Directorium\Api\Tests\Http;
 
 use Closure;
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Http\Handler;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
-use Introibo\Api\Http\Router;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Http\Handler;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
+use Directorium\Api\Http\Router;
 use PHPUnit\Framework\TestCase;
 
 final class RouterTest extends TestCase

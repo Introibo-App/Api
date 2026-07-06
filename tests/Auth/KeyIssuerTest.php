@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Auth;
+namespace Directorium\Api\Tests\Auth;
 
-use Introibo\Api\Auth\InMemoryKeyStore;
-use Introibo\Api\Auth\KeyIssuer;
+use Directorium\Api\Auth\InMemoryKeyStore;
+use Directorium\Api\Auth\KeyIssuer;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
