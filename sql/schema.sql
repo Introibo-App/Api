@@ -1,4 +1,4 @@
--- Introibo API — access-control schema (#22).
+-- Directorium API — access-control schema (#22).
 --
 -- Holds only tenants, API keys, and aggregate counters — never a row per request.
 -- Applied once at deploy against the MySQL database named by INTROIBO_DB_DSN; the

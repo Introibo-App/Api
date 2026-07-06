@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Query;
+namespace Directorium\Api\Query;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Contract\ErrorCode;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Http\Request;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Contract\ErrorCode;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Http\Request;
 
 /**
  * Turns a raw request into a validated {@see CalendarQuery}, or throws the canonical

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Auth;
+namespace Directorium\Api\Auth;
 
 /**
  * A freshly issued key: the stored {@see ApiKey} record plus the **plaintext secret**,

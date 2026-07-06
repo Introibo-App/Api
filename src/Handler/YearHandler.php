@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Handler;
+namespace Directorium\Api\Handler;
 
-use Introibo\Api\Http\Request;
-use Introibo\Api\Query\RangeQuery;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Query\RangeQuery;
 
 /**
  * `GET /v1/year/{year}` — every resolved liturgical day in a civil year, as an

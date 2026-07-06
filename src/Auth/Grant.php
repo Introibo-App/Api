@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Auth;
+namespace Directorium\Api\Auth;
 
 /**
  * The outcome of a successful authorisation: the tenant the request is scoped to

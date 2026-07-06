@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Query;
+namespace Directorium\Api\Query;
 
 use DateTimeImmutable;
-use Introibo\Api\Engine\CoreGateway;
+use Directorium\Api\Engine\CoreGateway;
 
 /**
  * A validated, normalised calendar request: the civil date to resolve, the rubric

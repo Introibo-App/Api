@@ -8,7 +8,7 @@
          failOnWarning="true"
          beStrictAboutOutputDuringTests="true">
     <testsuites>
-        <testsuite name="introibo-api">
+        <testsuite name="directorium-api">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

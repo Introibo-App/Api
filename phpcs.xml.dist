@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="introibo-api">
-    <description>Coding standard for introibo/api: PSR-12.</description>
+<ruleset name="directorium-api">
+    <description>Coding standard for directorium/api: PSR-12.</description>
 
     <!-- Scan the front controller, maintainer scripts, the source, and the tests. -->
     <file>bin</file>

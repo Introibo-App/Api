@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Auth;
+namespace Directorium\Api\Auth;
 
 /**
  * An API key belonging to a tenant. Only the SHA-256 **hash** of the secret is ever

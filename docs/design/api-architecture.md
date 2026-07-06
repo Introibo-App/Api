@@ -1,4 +1,4 @@
-# The Introibo API — architecture
+# The Directorium API — architecture
 
 The versioned, cache-first HTTP service that exposes the Core liturgical engine to
 the Ordo plugin, the Site, and third-party clients. This document is the decision
@@ -8,10 +8,10 @@ contract described here.
 ## What the service is (and is not)
 
 - **A thin layer over Core.** Every piece of liturgical truth comes from
-  `introibo/core` through **one** boundary, `Engine\CoreGateway` (#6). No handler,
+  `directorium/core` through **one** boundary, `Engine\CoreGateway` (#6). No handler,
   parser, or cache reimplements a rubric or reshapes the day payload. Core is a
   Composer dependency, pinned by `composer.lock`; when Core moves, the API updates
-  deliberately (`composer update introibo/core`) and re-runs its gates.
+  deliberately (`composer update directorium/core`) and re-runs its gates.
 - **Cache-first.** The overwhelmingly common read — one date under one calendar —
   is deterministic and immutable for a given data version, so it is served as a
   pre-generated static file at the edge and only *computed* on a cold miss (#13,
@@ -182,7 +182,7 @@ the in-memory store, and `AccessControl::fromEnvironment()` wires MySQL when
 
 **No framework.** A hand-rolled front controller (`public/index.php`) → `Kernel` →
 `Http\Router` → `Http\Handler`, with immutable `Http\Request`/`Http\Response`
-value objects. Runtime dependencies are `introibo/core` and `ext-json` only. This
+value objects. Runtime dependencies are `directorium/core` and `ext-json` only. This
 mirrors Core's dependency-free clean-room ethos, keeps the PHP 8.2+ surface small,
 and fits a service whose hot path is static files the application never touches.
 Dev tooling matches Core: PHP_CodeSniffer (PSR-12), PHPStan, PHPUnit.

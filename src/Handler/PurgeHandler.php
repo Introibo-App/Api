@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Handler;
+namespace Directorium\Api\Handler;
 
-use Introibo\Api\Admin\AdminGate;
-use Introibo\Api\Contract\Envelope;
-use Introibo\Api\Edge\EdgeCache;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Http\Handler;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
+use Directorium\Api\Admin\AdminGate;
+use Directorium\Api\Contract\Envelope;
+use Directorium\Api\Edge\EdgeCache;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Http\Handler;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
 
 /**
  * `POST /v1/admin/purge` (#29) — an admin-only action that purges the edge cache.

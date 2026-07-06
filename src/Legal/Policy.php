@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Legal;
+namespace Directorium\Api\Legal;
 
 /**
  * A published policy document (acceptable-use, terms) served as data: a stable slug,

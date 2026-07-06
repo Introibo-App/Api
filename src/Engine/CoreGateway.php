@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Engine;
+namespace Directorium\Api\Engine;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Contract\ErrorCode;
-use Introibo\Api\Query\CalendarQuery;
-use Introibo\Api\Query\RangeQuery;
-use Introibo\Core\Contract\CalendarDescriptor;
-use Introibo\Core\Contract\DayContract;
-use Introibo\Core\Overlay\CalendarCatalog;
-use Introibo\Core\Precedence\ResolvedYear;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Contract\ErrorCode;
+use Directorium\Api\Query\CalendarQuery;
+use Directorium\Api\Query\RangeQuery;
+use Directorium\Core\Contract\CalendarDescriptor;
+use Directorium\Core\Contract\DayContract;
+use Directorium\Core\Overlay\CalendarCatalog;
+use Directorium\Core\Precedence\ResolvedYear;
 use Throwable;
 
 /**

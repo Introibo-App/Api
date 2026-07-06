@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Handler;
+namespace Directorium\Api\Handler;
 
-use Introibo\Api\Contract\Envelope;
-use Introibo\Api\Http\Handler;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
-use Introibo\Api\Legal\Policy;
+use Directorium\Api\Contract\Envelope;
+use Directorium\Api\Http\Handler;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
+use Directorium\Api\Legal\Policy;
 
 /**
  * `GET /v1/aup` and `GET /v1/terms` (#30) — the acceptable-use policy and terms of

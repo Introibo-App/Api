@@ -1,12 +1,12 @@
 {
-    "name": "introibo/api",
-    "description": "The Introibo API: a versioned, cache-first HTTP service over the liturgical engine.",
+    "name": "directorium/api",
+    "description": "The Directorium API: a versioned, cache-first HTTP service over the liturgical engine.",
     "type": "project",
     "license": "AGPL-3.0-or-later",
     "require": {
         "php": ">=8.2",
         "ext-json": "*",
-        "introibo/core": "dev-develop"
+        "directorium/core": "dev-develop"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.0",
@@ -22,12 +22,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Introibo\\Api\\": "src/"
+            "Directorium\\Api\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Introibo\\Api\\Tests\\": "tests/"
+            "Directorium\\Api\\Tests\\": "tests/"
         }
     },
     "scripts": {

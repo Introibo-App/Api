@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Contract;
+namespace Directorium\Api\Contract;
 
 use JsonException;
 use RuntimeException;

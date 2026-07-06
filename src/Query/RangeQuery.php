@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Query;
+namespace Directorium\Api\Query;
 
-use Introibo\Api\Engine\CoreGateway;
+use Directorium\Api\Engine\CoreGateway;
 
 /**
  * A validated, normalised request for a span of days — a whole civil year, or a

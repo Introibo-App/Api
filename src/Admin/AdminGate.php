@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Admin;
+namespace Directorium\Api\Admin;
 
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Contract\ErrorCode;
-use Introibo\Api\Http\Request;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Contract\ErrorCode;
+use Directorium\Api\Http\Request;
 
 /**
  * Guards the admin actions (rebuild, purge) with a single shared secret, separate

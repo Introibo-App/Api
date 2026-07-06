@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Auth;
+namespace Directorium\Api\Auth;
 
 use DateTimeImmutable;
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Contract\ErrorCode;
-use Introibo\Api\Http\Request;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Contract\ErrorCode;
+use Directorium\Api\Http\Request;
 use PDO;
 
 /**

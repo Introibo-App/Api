@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "107936aa8c4a739d6f15428d44fc3f90",
+    "content-hash": "2716a4e7d0e734c449b9a97a19008706",
     "packages": [
         {
-            "name": "introibo/core",
+            "name": "directorium/core",
             "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Introibo-App/Core.git",
-                "reference": "cf556457864d4ffa38642d349d91fd91f6eb2474"
+                "reference": "42ef21bbb64a1067553ce3c68b4c381de53459e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Introibo-App/Core/zipball/cf556457864d4ffa38642d349d91fd91f6eb2474",
-                "reference": "cf556457864d4ffa38642d349d91fd91f6eb2474",
+                "url": "https://api.github.com/repos/Introibo-App/Core/zipball/42ef21bbb64a1067553ce3c68b4c381de53459e0",
+                "reference": "42ef21bbb64a1067553ce3c68b4c381de53459e0",
                 "shasum": ""
             },
             "require": {
@@ -34,7 +34,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Introibo\\Core\\": "src/"
+                    "Directorium\\Core\\": "src/"
                 },
                 "files": [
                     "src/functions.php"
@@ -42,7 +42,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Introibo\\Core\\Tests\\": "tests/"
+                    "Directorium\\Core\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -56,7 +56,7 @@
                     "phpstan analyse"
                 ],
                 "test": [
-                    "phpunit --testsuite introibo-core"
+                    "phpunit --testsuite directorium-core"
                 ],
                 "validate-oracles": [
                     "phpunit --testsuite validation"
@@ -70,7 +70,7 @@
             "license": [
                 "AGPL-3.0-or-later"
             ],
-            "description": "The Introibo liturgical engine: a clean-room PHP library computing the traditional Roman calendar.",
+            "description": "The Directorium liturgical engine: a clean-room PHP library computing the traditional Roman calendar.",
             "keywords": [
                 "calendar",
                 "catholic",
@@ -82,7 +82,7 @@
                 "source": "https://github.com/Introibo-App/Core/tree/develop",
                 "issues": "https://github.com/Introibo-App/Core/issues"
             },
-            "time": "2026-07-02T21:19:08+00:00"
+            "time": "2026-07-06T16:58:00+00:00"
         }
     ],
     "packages-dev": [
@@ -2072,7 +2072,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "introibo/core": 20
+        "directorium/core": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -22,10 +22,10 @@
 
 declare(strict_types=1);
 
-use Introibo\Api\Cache\StaticStore;
-use Introibo\Api\Engine\CoreGateway;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Kernel;
+use Directorium\Api\Cache\StaticStore;
+use Directorium\Api\Engine\CoreGateway;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Kernel;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 

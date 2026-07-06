@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Cache;
+namespace Directorium\Api\Tests\Cache;
 
-use Introibo\Api\Cache\CacheHeaders;
-use Introibo\Api\Http\Request;
-use Introibo\Api\Http\Response;
+use Directorium\Api\Cache\CacheHeaders;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Http\Response;
 use PHPUnit\Framework\TestCase;
 
 final class CacheHeadersTest extends TestCase

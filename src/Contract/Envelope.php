@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Contract;
+namespace Directorium\Api\Contract;
 
 /**
  * The canonical success envelope every endpoint returns: a `data` payload and a

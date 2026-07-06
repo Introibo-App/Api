@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Legal;
+namespace Directorium\Api\Legal;
 
 /**
  * The service's published policies (#30). Kept as data so the AUP and terms are
@@ -25,7 +25,7 @@ final class Policies
     private const AUP = <<<'MD'
 # Acceptable Use Policy
 
-The Introibo API serves the traditional Roman liturgical calendar. By using it you agree:
+The Directorium API serves the traditional Roman liturgical calendar. By using it you agree:
 
 - **Use an API key** where one is required, and do not share, resell, or pool keys to
   evade quotas or rate limits.

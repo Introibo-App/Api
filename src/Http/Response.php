@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Http;
+namespace Directorium\Api\Http;
 
-use Introibo\Api\Contract\ApiError;
-use Introibo\Api\Contract\Json;
+use Directorium\Api\Contract\ApiError;
+use Directorium\Api\Contract\Json;
 
 /**
  * An immutable HTTP response: a status code, a header map, and an already-encoded

@@ -9,8 +9,8 @@
 
 declare(strict_types=1);
 
-use Introibo\Api\Http\Request;
-use Introibo\Api\Kernel;
+use Directorium\Api\Http\Request;
+use Directorium\Api\Kernel;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Http;
+namespace Directorium\Api\Http;
 
 /**
  * An immutable HTTP request: the method, decoded path, query parameters, and a

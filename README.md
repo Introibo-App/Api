@@ -1,14 +1,14 @@
-# Introibo API
+# Directorium API
 
 > Cache-first HTTP API for the traditional Roman liturgy — *Introíbo ad altáre Dei.*
 
-The Introibo **API** is the authoritative, versioned (`/v1`) HTTP service over the Introibo Core
+The Directorium **API** is the authoritative, versioned (`/v1`) HTTP service over the Directorium Core
 engine. Its responses are a pure function of `(date, system, calendar, office, hour, language)` and
 therefore immutable per key — pre-generated as static JSON for hot paths, computed on demand for
 cold dates, and fronted by Cloudflare with long, immutable TTLs, ETags, and a data-version stamp.
 Corrections bump the data-version and purge the edge cache.
 
-It issues and meters API keys per tenant (quotas + rate limits) and is consumed by the introibo.org
+It issues and meters API keys per tenant (quotas + rate limits) and is consumed by the directorium.app
 website and admin, the Ordo WordPress plugin, and future apps.
 
 ## Status
@@ -24,12 +24,12 @@ no Python.
 ## Development
 
 Work branches off `develop`, lands via squash PRs with Conventional-Commit titles, and releases are
-cut automatically by release-please. The engine is consumed as the `introibo/core` Composer
+cut automatically by release-please. The engine is consumed as the `directorium/core` Composer
 dependency (pinned by `composer.lock`); the API adds no liturgical logic of its own. The
 architecture is documented in [docs/design/api-architecture.md](docs/design/api-architecture.md).
 
 ```sh
-composer install            # pulls in introibo/core
+composer install            # pulls in directorium/core
 composer check              # PSR-12 lint + PHPStan + PHPUnit — the CI gate
 php -S 127.0.0.1:8080 -t public public/index.php
 #   → GET /v1/day/2026-09-03?calendar=sspx
@@ -52,5 +52,5 @@ Admin actions (`POST /v1/admin/purge`, `/rebuild`) exist only when
 
 ## Licence
 
-© 2026 Introibo. Licensed under **AGPL-3.0-or-later** (see [LICENSE](LICENSE)). The compiled
+© 2026 Directorium. Licensed under **AGPL-3.0-or-later** (see [LICENSE](LICENSE)). The compiled
 calendar dataset is released under **CC0**.

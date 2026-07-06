@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Contract;
+namespace Directorium\Api\Tests\Contract;
 
-use Introibo\Api\Contract\ApiError;
-use Introibo\Api\Contract\ErrorCode;
-use Introibo\Api\Contract\Json;
+use Directorium\Api\Contract\ApiError;
+use Directorium\Api\Contract\ErrorCode;
+use Directorium\Api\Contract\Json;
 use PHPUnit\Framework\TestCase;
 
 final class ErrorTest extends TestCase

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Introibo\Api\Tests\Admin;
+namespace Directorium\Api\Tests\Admin;
 
-use Introibo\Api\Admin\AdminGate;
-use Introibo\Api\Contract\ApiException;
-use Introibo\Api\Http\Request;
+use Directorium\Api\Admin\AdminGate;
+use Directorium\Api\Contract\ApiException;
+use Directorium\Api\Http\Request;
 use PHPUnit\Framework\TestCase;
 
 final class AdminGateTest extends TestCase
