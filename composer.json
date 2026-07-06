@@ -12,7 +12,7 @@
         "phpunit/phpunit": "^11.0",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
-        "squizlabs/php_codesniffer": "^3.11"
+        "squizlabs/php_codesniffer": "^4.0"
     },
     "repositories": [
         {
