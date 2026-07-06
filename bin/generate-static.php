@@ -12,7 +12,7 @@
  * year is one Core resolution.
  *
  * Usage:
- *   INTROIBO_STATIC_ROOT=/path php bin/generate-static.php START_YEAR END_YEAR
+ *   DIRECTORIUM_STATIC_ROOT=/path php bin/generate-static.php START_YEAR END_YEAR
  *   php bin/generate-static.php START_YEAR END_YEAR /path/to/static-root
  *
  * The tree is namespaced by the data version; point the web server / edge at the
@@ -31,12 +31,12 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 $startYear = isset($argv[1]) ? (int) $argv[1] : 0;
 $endYear = isset($argv[2]) ? (int) $argv[2] : 0;
-$root = $argv[3] ?? (getenv('INTROIBO_STATIC_ROOT') ?: null);
+$root = $argv[3] ?? (getenv('DIRECTORIUM_STATIC_ROOT') ?: null);
 
 if ($startYear < CoreGateway::MIN_YEAR || $endYear > CoreGateway::MAX_YEAR || $startYear > $endYear) {
     fwrite(STDERR, sprintf(
         "usage: php bin/generate-static.php START_YEAR END_YEAR [ROOT]\n" .
-        "  years must be within %d-%d and ascending; ROOT via arg or INTROIBO_STATIC_ROOT\n",
+        "  years must be within %d-%d and ascending; ROOT via arg or DIRECTORIUM_STATIC_ROOT\n",
         CoreGateway::MIN_YEAR,
         CoreGateway::MAX_YEAR,
     ));
@@ -44,7 +44,7 @@ if ($startYear < CoreGateway::MIN_YEAR || $endYear > CoreGateway::MAX_YEAR || $s
 }
 
 if (!is_string($root) || $root === '') {
-    fwrite(STDERR, "error: no static root — pass it as the 3rd argument or set INTROIBO_STATIC_ROOT\n");
+    fwrite(STDERR, "error: no static root — pass it as the 3rd argument or set DIRECTORIUM_STATIC_ROOT\n");
     exit(2);
 }
 

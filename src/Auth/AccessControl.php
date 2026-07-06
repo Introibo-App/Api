@@ -37,18 +37,18 @@ final class AccessControl
     }
 
     /**
-     * Build the gate from the environment: `INTROIBO_DB_DSN` (+ `_USER`/`_PASSWORD`)
+     * Build the gate from the environment: `DIRECTORIUM_DB_DSN` (+ `_USER`/`_PASSWORD`)
      * enables MySQL-backed access control; unset leaves the gate open.
      */
     public static function fromEnvironment(): self
     {
-        $dsn = getenv('INTROIBO_DB_DSN');
+        $dsn = getenv('DIRECTORIUM_DB_DSN');
         if ($dsn === false || $dsn === '') {
             return self::open();
         }
 
-        $user = getenv('INTROIBO_DB_USER');
-        $password = getenv('INTROIBO_DB_PASSWORD');
+        $user = getenv('DIRECTORIUM_DB_USER');
+        $password = getenv('DIRECTORIUM_DB_PASSWORD');
         $pdo = new PDO(
             $dsn,
             $user === false ? null : $user,

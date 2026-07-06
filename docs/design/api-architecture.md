@@ -163,7 +163,7 @@ enabling metering is a deploy-time switch, not a code change.
 
 The MySQL database is the maintainer-provisioned half; the logic is proven against
 the in-memory store, and `AccessControl::fromEnvironment()` wires MySQL when
-`INTROIBO_DB_DSN` is set.
+`DIRECTORIUM_DB_DSN` is set.
 
 ## Admin actions & policies
 
@@ -174,7 +174,7 @@ the in-memory store, and `AccessControl::fromEnvironment()` wires MySQL when
   Purge invalidates the edge (`Edge\EdgeCache` → `CloudflareEdge`); rebuild reports
   the current data version and purges, so a new build is served at once (the static
   tier is regenerated out of band with `bin/generate-static.php`). **The admin routes
-  are only registered when `INTROIBO_ADMIN_TOKEN` is set** — an unconfigured service
+  are only registered when `DIRECTORIUM_ADMIN_TOKEN` is set** — an unconfigured service
   exposes no admin surface. When no CDN is configured the edge is `NullEdge` and a
   purge is a no-op.
 
