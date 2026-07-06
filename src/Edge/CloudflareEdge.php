@@ -20,11 +20,11 @@ final class CloudflareEdge implements EdgeCache
     ) {
     }
 
-    /** Build from `INTROIBO_CF_ZONE` + `INTROIBO_CF_TOKEN`, or null when unset. */
+    /** Build from `DIRECTORIUM_CF_ZONE` + `DIRECTORIUM_CF_TOKEN`, or null when unset. */
     public static function fromEnvironment(): ?self
     {
-        $zone = getenv('INTROIBO_CF_ZONE');
-        $token = getenv('INTROIBO_CF_TOKEN');
+        $zone = getenv('DIRECTORIUM_CF_ZONE');
+        $token = getenv('DIRECTORIUM_CF_TOKEN');
         if (!is_string($zone) || $zone === '' || !is_string($token) || $token === '') {
             return null;
         }

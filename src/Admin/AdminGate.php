@@ -20,10 +20,10 @@ final class AdminGate
     {
     }
 
-    /** Build from `INTROIBO_ADMIN_TOKEN`, or disabled when unset. */
+    /** Build from `DIRECTORIUM_ADMIN_TOKEN`, or disabled when unset. */
     public static function fromEnvironment(): self
     {
-        $token = getenv('INTROIBO_ADMIN_TOKEN');
+        $token = getenv('DIRECTORIUM_ADMIN_TOKEN');
 
         return new self($token === false || $token === '' ? null : $token);
     }

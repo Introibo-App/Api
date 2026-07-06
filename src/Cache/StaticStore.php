@@ -30,12 +30,12 @@ final class StaticStore
     }
 
     /**
-     * Build the store from the environment: `INTROIBO_STATIC_ROOT` names the root, or
+     * Build the store from the environment: `DIRECTORIUM_STATIC_ROOT` names the root, or
      * the store is disabled when it is unset. The version namespaces the tree.
      */
     public static function fromEnvironment(string $version): self
     {
-        $root = getenv('INTROIBO_STATIC_ROOT');
+        $root = getenv('DIRECTORIUM_STATIC_ROOT');
 
         return new self($root === false ? null : $root, $version);
     }

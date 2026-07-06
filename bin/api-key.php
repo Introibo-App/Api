@@ -2,7 +2,7 @@
 
 /**
  * Manage tenants and API keys (#23). A maintainer tool: it talks straight to the
- * access-control database (INTROIBO_DB_DSN), so it runs where that database lives.
+ * access-control database (DIRECTORIUM_DB_DSN), so it runs where that database lives.
  *
  * Usage:
  *   php bin/api-key.php tenant <id> <name> [monthlyQuota]
@@ -21,14 +21,14 @@ use Directorium\Api\Auth\Tenant;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-$dsn = getenv('INTROIBO_DB_DSN');
+$dsn = getenv('DIRECTORIUM_DB_DSN');
 if ($dsn === false || $dsn === '') {
-    fwrite(STDERR, "error: set INTROIBO_DB_DSN (and _USER / _PASSWORD) to the API database.\n");
+    fwrite(STDERR, "error: set DIRECTORIUM_DB_DSN (and _USER / _PASSWORD) to the API database.\n");
     exit(2);
 }
 
-$user = getenv('INTROIBO_DB_USER');
-$password = getenv('INTROIBO_DB_PASSWORD');
+$user = getenv('DIRECTORIUM_DB_USER');
+$password = getenv('DIRECTORIUM_DB_PASSWORD');
 $pdo = new PDO(
     $dsn,
     $user === false ? null : $user,
